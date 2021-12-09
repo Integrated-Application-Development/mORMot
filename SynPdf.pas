@@ -4584,11 +4584,6 @@ begin // this function is intented to use with Tj or '
       include(Font.fWinAnsiUsed,Text^);
     case Text^ of
      #0: Break;
-     #160: begin        // fixed space is written as normal space
-       B^ := ' ';
-       inc(B);
-       inc(Text);
-     end;
      #40,#41,#92: begin // see PDF 2nd ed. p. 290
        B[1] := Text^;
        B[0] := '\';
@@ -4989,7 +4984,6 @@ begin
       repeat
         case Ansi of
           40,41,92: Add('\');   // see PDF 2nd ed. p. 290
-          160: Ansi := 32; // fixed space is written as normal space
         end;
         TTF.AddUsedWinAnsiChar(AnsiChar(Ansi));
         Add(AnsiChar(Ansi));
@@ -5008,8 +5002,6 @@ begin
       AddGlyphFromChar(PW^,Canvas,TTF,@NextLine);
       inc(PW);
       Ansi := WideCharToWinAnsi(cardinal(PW^));
-      if Ansi=160 then
-        Ansi := 32;
       if Ansi=32 then
         if WideCharToWinAnsi(cardinal(PW[1]))<0 then
           continue; // we allow one space inside Unicode text
